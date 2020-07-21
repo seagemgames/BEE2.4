@@ -10,6 +10,7 @@ from typing import Dict, Optional, List, Union, Tuple, Set, FrozenSet, Iterable
 from precomp import brushLoc, options, packing, conditions
 from precomp.conditions import meta_cond, make_result, make_flag, RES_EXHAUSTED
 from precomp.conditions.globals import precache_model
+from precomp.errors import UserError
 from precomp.instanceLocs import resolve as resolve_inst
 from srctools import (
     Property, VMF, Entity, Vec, Output,
@@ -1104,9 +1105,15 @@ def link_cubes(vmf: VMF):
             # Infinite and 3 (default) are treated as off.
             if 3 < timer <= 30:
                 if timer in dropper_timer:
-                    raise ValueError(
+                    other_inst = dropper_timer[timer][0]
+                    raise UserError(
                         'Two droppers with the same '
-                        'timer value: ' + str(timer)
+                        'timer value: <code>{}</code>',
+                        timer,
+                        points=[
+                            Vec.from_str(inst['origin']),
+                            Vec.from_str(other_inst['origin']),
+                        ]
                     )
                 dropper_timer[timer] = inst, inst_type
             # For setup later.
@@ -1131,16 +1138,16 @@ def link_cubes(vmf: VMF):
             try:
                 dropper, drop_type = dropper_timer[timer]
             except KeyError:
-                raise ValueError(
+                raise UserError(
                     'Unknown cube "linkage" value ({}) in cube!\n'
                     'A cube has a timer set which doesn\'t match '
-                    'any droppers.'.format(timer)
+                    'any droppers.', timer
                 ) from None
             if used_droppers[dropper]:
-                raise ValueError(
-                    'Dropper tried to link to two cubes! (timer={})'.format(
-                        timer
-                    )) from None
+                raise UserError(
+                    'Dropper tried to link to two cubes! (timer={})',
+                    timer,
+                ) from None
             used_droppers[dropper] = True
 
             # Autodrop on the dropper shouldn't be on - that makes
@@ -1172,10 +1179,11 @@ def link_cubes(vmf: VMF):
                 pass  # Drop out of if
             else:
                 if used_droppers[dropper]:
-                    raise ValueError(
+                    raise UserError(
                         'Dropper above custom cube is already'
                         ' linked!\n'
-                        'Cube type: {}'.format(cube_type.id)
+                        'Cube type: {}',
+                        cube_type.id
                     ) from None
                 used_droppers[dropper] = True
                 cube.remove()
