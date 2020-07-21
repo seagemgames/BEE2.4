@@ -544,7 +544,7 @@ def check_all() -> None:
                 # This is raised to immediately stop running
                 # this condition, and skip to the next condtion.
                 break
-            except:
+            except Exception:
                 # Print the source of the condition if if fails...
                 LOGGER.exception(
                     'Error in {}:',
