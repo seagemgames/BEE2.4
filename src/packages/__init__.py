@@ -64,7 +64,7 @@ class SelitemData(NamedTuple):
         name = info['name']
         group = info['group', '']
         sort_key = info['sort_key', '']
-        desc = desc_parse(info, info['id'])
+        desc = desc_parse(info, info['id'], pack_id)
         if not group:
             group = None
         if not short_name:
@@ -910,7 +910,8 @@ class Style(PakObject):
 
 def desc_parse(
     info: Property,
-    desc_id: str='',
+    desc_id: str,
+    pak_id: str,
     *,
     prop_name: str='description',
 ) -> tkMarkdown.MarkdownData:
@@ -929,7 +930,7 @@ def desc_parse(
         else:
             lines.append(prop.value)
 
-    return tkMarkdown.convert('\n'.join(lines))
+    return tkMarkdown.convert('\n'.join(lines), pak_id)
 
 
 def sep_values(string: str, delimiters: Iterable[str] = ',;/') -> List[str]:

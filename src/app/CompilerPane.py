@@ -27,7 +27,7 @@ PETI_HEIGHT = 312
 CORRIDOR: Dict[str, selector_win.selWin] = {}
 CORRIDOR_DATA: Dict[Tuple[str, int], CorrDesc] = {}
 
-CORRIDOR_DESC = tkMarkdown.convert('')
+CORRIDOR_DESC = tkMarkdown.convert('', None)
 
 COMPILE_DEFAULTS = {
     'Screenshot': {
@@ -286,7 +286,7 @@ def set_corridors(config: Dict[Tuple[str, int], CorrDesc]):
                 item.icon = item.large_icon = default_icon
 
             if data.desc:
-                item.desc = tkMarkdown.convert(data.desc)
+                item.desc = tkMarkdown.convert(data.desc, None)
             else:
                 item.desc = CORRIDOR_DESC
 
