@@ -278,7 +278,7 @@ def set_corridors(config: Dict[Tuple[str, int], CorrDesc]):
                     data.icon,
                     *selector_win.ICON_SIZE_LRG,
                 )
-                item.large_icon = img.Handle.parse_uri(
+                item.icon = img.Handle.parse_uri(
                     data.icon,
                     selector_win.ICON_SIZE, selector_win.ICON_SIZE,
                 )
@@ -290,6 +290,7 @@ def set_corridors(config: Dict[Tuple[str, int], CorrDesc]):
             else:
                 item.desc = CORRIDOR_DESC
 
+        selector.refresh()
         selector.set_disp()
 
     COMPILE_CFG.save_check()
@@ -798,7 +799,6 @@ def make_map_widgets(frame: ttk.Frame):
     elev_frame.grid(row=2, column=0, sticky=EW)
     elev_frame.columnconfigure(0, weight=1)
     elev_frame.columnconfigure(1, weight=1)
-
 
     UI['elev_preview'] = ttk.Radiobutton(
         elev_frame,

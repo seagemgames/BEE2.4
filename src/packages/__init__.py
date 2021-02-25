@@ -164,7 +164,7 @@ class ExportData(NamedTuple):
 class CorrDesc(NamedTuple):
     """Name, description and icon for each corridor in a style."""
     name: str
-    icon: 'PackagePath'
+    icon: utils.PackagePath
     desc: str
 
 
@@ -756,7 +756,7 @@ class Style(PakObject):
                 try:
                     self.corridors[group, i] = corridors[group, i]
                 except KeyError:
-                    self.corridors[group, i] = CorrDesc('', utils.PackagePath('alpha', ''), '')
+                    self.corridors[group, i] = CorrDesc('', img.PATH_BLANK, '')
 
         if config is None:
             self.config = Property(None, [])
@@ -805,7 +805,7 @@ class Style(PakObject):
                 prop = group_prop.find_key(str(i), '')  # type: Property
 
                 if icon_folder:
-                    icon = utils.PackagePath(data.pak_id, '{}/{}/{}.jpg'.format(icon_folder, group, i))
+                    icon = utils.PackagePath(data.pak_id, 'corr/{}/{}/{}.jpg'.format(icon_folder, group, i))
                 else:
                     icon = img.PATH_BLANK
 
