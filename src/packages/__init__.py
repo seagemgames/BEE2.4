@@ -18,7 +18,7 @@ from typing import (
     Optional, Any, TYPE_CHECKING,
     TypeVar, Type, cast,
     Dict, List, Tuple, NamedTuple, Collection,
-    Iterable,
+    Iterable, Mapping,
 )
 
 
@@ -81,7 +81,6 @@ class SelitemData(NamedTuple):
                 img.PETI_ITEM_BG,
                 consts.SEL_ICON_SIZE, consts.SEL_ICON_SIZE,
             )
-        large_icon = info['iconlarge', None]
         try:
             large_icon = img.Handle.parse(
                 info.find_key('iconlarge'),
@@ -177,7 +176,7 @@ CORRIDOR_COUNTS = {
 }
 
 # This package contains necessary components, and must be available.
-CLEAN_PACKAGE = 'BEE2_CLEAN_STYLE'
+CLEAN_PACKAGE = 'BEE2_CLEAN_STYLE'.casefold()
 
 # Check to see if the zip contains the resources referred to by the packfile.
 CHECK_PACKFILE_CORRECTNESS = False
@@ -476,7 +475,7 @@ def load_packages(
     log_incorrect_packfile=False,
     has_mel_music=False,
     has_tag_music=False,
-) -> Tuple[dict, Collection[FileSystem]]:
+) -> Tuple[dict, Mapping[str, FileSystem]]:
     """Scan and read in all packages."""
     global CHECK_PACKFILE_CORRECTNESS
     pak_dir = os.path.abspath(pak_dir)
@@ -599,7 +598,7 @@ def load_packages(
         log_item_fallbacks,
         log_missing_styles,
     )
-    return data, PACKAGE_SYS.values()
+    return data, PACKAGE_SYS
 
 
 def parse_package(
